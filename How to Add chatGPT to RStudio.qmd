@@ -218,7 +218,7 @@ ggplot(data = mtcars, aes(x = hp, y = mpg)) + #creates a scatterplot of mpg vs h
   geom_point() #adds points to the scatterplot
 ```
 
-Not bad but my my preference is to have comments before a line of code, not next to it . 😉
+Again not bad but my preference is to have comments before a line of code, not next to it. 😉
 
 ## 6. Freeform GPT Editor
 
