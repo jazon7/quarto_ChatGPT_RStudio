@@ -1,0 +1,263 @@
+---
+title: "How to Add ChatGPT to RStudio"
+format:
+  html:
+    theme: litera
+    toc: true
+    toc-location: left
+    number-sections: false
+    number-depth: 2
+    code-fold: show
+    code-tools: true
+    code-overflow: wrap
+    code-copy: hover
+    fig-align: center
+    fig-height: 7
+    fig-width: 9
+    highlight-style: espresso
+    embed-resources: true
+    code-link: false
+editor: source
+execute: 
+  echo: TRUE
+  warning: FALSE
+  eval: false
+bibliography: references.bib
+---
+
+![](images/image-407167077.png)
+
+[ChatGPT](https://chat.openai.com/auth/login?next=/chat) is a chatbot developed by [OpenAI](https://openai.com/) and launched in November 2022.
+
+Since the release, ChatGPT has become very popular[^1] and is being used for a range of things including:
+
+[^1]: It is [estimated](https://www.zdnet.com/article/chatgpt-just-became-the-fastest-growing-app-of-all-time/) that ChatGPT had 100 million active users in January 2023, only two months after launch.
+
+-   answering simple questions
+
+-   having philosophical conversations
+
+-   composing essays
+
+-   writing code
+
+-   And much more[^2]
+
+[^2]: [chatgpt-30-incredible-ways-to-use](https://interestingengineering.com/innovation/chatgpt-30-incredible-ways-to-use)
+
+If you haven't yet, you can create an account and start interacting with ChatGPT [here](https://chat.openai.com/auth/login?next=/chat).
+
+For those who use R and RStudio, here is how you can bring ChatGPT into RStudio.
+
+# How to Add ChatGPT to RStudio?
+
+## 1. Install the [`gptstudio`](https://github.com/MichelNivard/GPTstudio) package
+
+Load the required packages:
+
+```{r}
+install.packages('pacman')
+library(pacman)
+pacman::p_load(devtools, usethis)
+pacman::p_load_gh("MichelNivard/gptstudio")
+```
+
+Once `gptstudio` is installed[^3], the following steps must be completed before it will work.
+
+[^3]: RStudio may need to be restarted for `gptstudio` to appear in the Addins menu.
+
+## 2. Make an OpenAI account.
+
+You need an OpenAI account to interact with ChatGPT.
+
+Make an OpenAI account [here](https://chat.openai.com/auth/login?next=/chat).
+
+## 3. Create an OpenAI API key
+
+To use the [openai](https://github.com/irudnyts/openai) package within Rstudio, you need an OpenAI API Key.
+
+To create an OpenAI API key, go to the OpenAI API key page [here](https://beta.openai.com/account/api-keys).\
+\
+Click on **Create new secret key.**
+
+![](images/image-1037596275.png){width="200"}
+
+A message will pop up to save the secret key.
+
+![](images/image-1267551908.png){width="384"}
+
+Copy the secret key and store it somewhere safe, then click OK.
+
+## 4. Set the API key in Rstudio
+
+For RStudio to connect to ChatGPT, the OpenAI API key must be set within RStudio.
+
+To set the API key you can either:
+
+### a) Set a global environmental variable.
+
+To set a global environment variable, you can use the following command, replacing `"<APIKEY>"` with your actual secret key:
+
+```{r}
+Sys.senv(OPENAI_API_KEY = "<APIKEY>")
+```
+
+### b) Edit the .Renviron file
+
+#### I. User specific
+
+Open the .Renviron file with help of the `usethis` package:
+
+```{r}
+usethis::edit_r_environ()
+```
+
+Add the following line to the file, replacing `"<APIKEY>"` with your actual secret key:
+
+`OPENAI_API_KEY = <APIKEY>`
+
+This API key is now accessible in all your projects which means ChatGPT will work in all your projects.
+
+#### II. Project specific
+
+Open the .Renviron file with `usethis`:
+
+```{r}
+usethis::edit_r_environ(scope = 'project')
+```
+
+Add the following line to the file, again replacing `"<APIKEY>"` with your actual key:
+
+`OPENAI_API_KEY = <APIKEY>`
+
+The .Renviron file will be stored in the current project folder and the API key will only be accessible to the current project.
+
+This means ChatGPT will ***only*** work in the current project.
+
+*Note: If you are using GitHub/GitLabs, do not forget to add .Renviron to .gitignore!*
+
+# How to use ChatGPT in RStudio?
+
+The `gptstudio` options can be accessed through the RStudio Addins menu.
+
+![](images/image-18445577.png)
+
+## 1. GPT Chat
+
+Selecting GPT Chat allows you to interact with ChatGPT directly within RStudio. \
+\
+It feels similar to the web app version of ChatGPT and means you don't have to login to ChatGPT with a web browser[^4]. \
+\
+\
+![](images/image-1509759664.png)
+
+[^4]: Sometimes the standard ChatGPT web interface is not accessible due to 'being at capacity'. I find when this happens I can still interact with ChatGPT via the RStudio Addin.
+
+## 2. Spelling and Grammar
+
+The **Spelling and Grammar** option is self explanatory and appears to work well.
+
+For example, I ran **Spelling and Grammar** on the following text:
+
+`Hello ths is a speling check example with ChatGPT inctalled in RStudio.`
+
+And this is what it returned:
+
+`Hello this is a spelling check example with ChatGPT installed in RStudio.`
+
+## 3. Change Text to Active Voice
+
+The **Change Text to Active Voice** is also self explanatory and again, appears to work well. \
+\
+For example, I gave it this text:
+
+`The person ran down the road and picked up all the rubbish they could find.`
+
+And it returned this:
+
+`The person picked up all the rubbish they could find.`
+
+## 4. Write/Code from Prompt
+
+The **Write/Code from Prompt** option takes a chunk of highlighted text and attempts to write code.
+
+For example, I gave it this text:
+
+`Use ggplot to make a scatter plot of mpg vs. hp using the mtcars dataset`
+
+And it wrote the following code:
+
+```{r echo=TRUE, eval=FALSE}
+library(ggplot2)
+
+ggplot(data = mtcars, aes(x = hp, y = mpg)) +
+  geom_point() 
+```
+
+Not bad at all! 😲
+
+## 5. Comment your Code
+
+The **Comment your code** option takes a selected code chunk and returns the same code with added comments.
+
+For example, I gave it this code chunk:
+
+```{r}
+library(ggplot2)
+
+ggplot(data = mtcars, aes(x = hp, y = mpg)) +
+  geom_point()
+```
+
+And it returned this:
+
+```{r}
+library(ggplot2) #loads the ggplot2 package
+
+ggplot(data = mtcars, aes(x = hp, y = mpg)) + #creates a scatterplot of mpg vs hp
+  geom_point() #adds points to the scatterplot
+```
+
+Not bad but my my preference is to have comments before a line of code, not next to it . 😉
+
+## 6. Freeform GPT Editor
+
+**Freeform GPT Editor** is probably the most powerful option because it lets you apply ***any*** edit to a selection of code or text.
+
+For example, I highlighted the code `mtcars[, c("mpg","cyl"]` and asked the **Freeform GPT Editor** to "Convert the code into `Tidyverse` syntax". \
+\
+Here is what it produced:
+
+![](images/image-1938121404.png)
+
+Very impressive! 😦
+
+## 7. Specify Model Editor
+
+The **Specify Model Editor** does not appear to come with instructions.\
+\
+However, I decided to give it a try.\
+\
+I asked it to predict `mpg` by `hp` and `cyl` in the `mtcars` data set.\
+\
+Here is what it came up with:\
+\
+![](images/image-1496825754.png)
+
+Again, not bad! 👏🏼
+
+# Final Thoughts
+
+ChatGPT is not only fun, but is incredibly useful when developing code. \
+\
+I thought adding ChatGPT to RStudio would be a bit of a gimmick.
+
+But boy I was wrong!
+
+`gptstudio` brings the power of ChatGPT into RStudio and adds some impressive functionality.
+
+Thanks to @gptstudio who developed the `gptstudio`package. \
+
+# Resources
+
+<a href="https://www.freepik.com/free-photo/technology-human-touch-background-modern-remake-creation-adam_17851045.htm#query=ai&position=5&from_view=search&track=sph">Image by rawpixel.com</a> on Freepik
