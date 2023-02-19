@@ -1,0 +1,4 @@
+- source: How to Add chatGPT to RStudio.qmd
+  quarto-pub:
+    - id: a3410d1c-ba22-4d6f-bfb6-058f816e28df
+      url: 'https://quartopub.com/sites/jazon/how-to-add-chatgpt-to-rstudio'
